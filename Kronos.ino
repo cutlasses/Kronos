@@ -25,7 +25,7 @@ AudioConnection          patch_cord_d7( delay_mixer, freeverb );
 AudioConnection          patch_cord_8( delay_mixer, 0, reverb_mixer, 0 );
 AudioConnection          patch_cord_9( freeverb, 0, reverb_mixer, 1);
 AudioConnection          patch_cord_10( reverb_mixer, bitcrusher_mixer );
-AudioConnection          patch_cord_d11( reverb_mixer, 0, bitcrusher_mixer, 0 );
+AudioConnection          patch_cord_11( reverb_mixer, 0, bitcrusher_mixer, 0 );
 AudioConnection          patch_cord_12( bitcrusher, 0, bitcrusher_mixer, 1 );
 AudioConnection          patch_cord_13( bitcrusher_mixer, dac );
 // GUItool: end automatically generated code
