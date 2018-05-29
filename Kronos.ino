@@ -33,23 +33,62 @@ AudioEffectBitcrusher    bitcrusher;
 AudioMixer4              bitcrusher_mixer;
 
 AudioConnection          patch_cord_1( io.audio_input, 0, feedback_mixer, 0 );
-AudioConnection          patch_cord_2( feedback_mixer, delay_line );
+AudioConnection          patch_cord_2( feedback_mixer, 0, delay_line, 0 );
 AudioConnection          patch_cord_3( feedback_mixer, 0, delay_mixer, 0);
 AudioConnection          patch_cord_4( delay_line, 0, filter, 0);
 AudioConnection          patch_cord_5( delay_line, 0, delay_mixer, 1);
 AudioConnection          patch_cord_6( filter, 0, feedback_mixer, 1);
-AudioConnection          patch_cord_d7( delay_mixer, freeverb );
+AudioConnection          patch_cord_d7( delay_mixer, 0, freeverb, 0 );
 AudioConnection          patch_cord_8( delay_mixer, 0, reverb_mixer, 0 );
 AudioConnection          patch_cord_9( freeverb, 0, reverb_mixer, 1);
-AudioConnection          patch_cord_10( reverb_mixer, bitcrusher_mixer );
+AudioConnection          patch_cord_10( reverb_mixer, 0, bitcrusher, 0 );
 AudioConnection          patch_cord_11( reverb_mixer, 0, bitcrusher_mixer, 0 );
 AudioConnection          patch_cord_12( bitcrusher, 0, bitcrusher_mixer, 1 );
 AudioConnection          patch_cord_13( bitcrusher_mixer, io.audio_output );
 
+
+//////////////////////////////////////
+
+void set_adc1_to_3v3()
+{
+  ADC1_SC3 = 0; // cancel calibration
+  ADC1_SC2 = ADC_SC2_REFSEL(0); // vcc/ext ref 3.3v
+
+  ADC1_SC3 = ADC_SC3_CAL;  // begin calibration
+
+  uint16_t sum;
+
+  //serial_print("wait_for_cal\n");
+
+  while( (ADC1_SC3 & ADC_SC3_CAL))
+  {
+    // wait
+  }
+
+  __disable_irq();
+
+    sum = ADC1_CLPS + ADC1_CLP4 + ADC1_CLP3 + ADC1_CLP2 + ADC1_CLP1 + ADC1_CLP0;
+    sum = (sum / 2) | 0x8000;
+    ADC1_PG = sum;
+    sum = ADC1_CLMS + ADC1_CLM4 + ADC1_CLM3 + ADC1_CLM2 + ADC1_CLM1 + ADC1_CLM0;
+    sum = (sum / 2) | 0x8000;
+    ADC1_MG = sum;
+
+  __enable_irq();
+  
+}
+
 void setup()
 {
-  // put your setup code here, to run once:
+ Serial.begin(9600);
 
+  AudioMemory(256);
+
+  analogReference(INTERNAL);
+
+  set_adc1_to_3v3();
+
+  Serial.print("Setup finished!\n");
 }
 
 void loop()
