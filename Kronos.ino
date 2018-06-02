@@ -4,6 +4,7 @@
 #include <SPI.h>
 #include <SD.h>
 #include <SerialFlash.h>
+#include "KronosInterface.h"
 
 
 // wrap in a struct to ensure initialisation order
@@ -34,7 +35,7 @@ AudioMixer4              bitcrusher_mixer;
 
 AudioConnection          patch_cord_1( io.audio_input, 0, feedback_mixer, 0 );
 AudioConnection          patch_cord_2( feedback_mixer, 0, delay_line, 0 );
-AudioConnection          patch_cord_3( feedback_mixer, 0, delay_mixer, 0);
+AudioConnection          patch_cord_3( io.audio_input, 0, delay_mixer, 0);
 AudioConnection          patch_cord_4( delay_line, 0, filter, 0);
 AudioConnection          patch_cord_5( delay_line, 0, delay_mixer, 1);
 AudioConnection          patch_cord_6( filter, 0, feedback_mixer, 1);
@@ -45,6 +46,8 @@ AudioConnection          patch_cord_10( reverb_mixer, 0, bitcrusher, 0 );
 AudioConnection          patch_cord_11( reverb_mixer, 0, bitcrusher_mixer, 0 );
 AudioConnection          patch_cord_12( bitcrusher, 0, bitcrusher_mixer, 1 );
 AudioConnection          patch_cord_13( bitcrusher_mixer, io.audio_output );
+
+KRONOS_INTERFACE         g_kronos_interface;
 
 
 //////////////////////////////////////
@@ -93,6 +96,28 @@ void setup()
 
 void loop()
 {
-  // put your main code here, to run repeatedly:
+  const uint32_t time_in_ms = millis();
+  g_kronos_interface.update( io.adc, time_in_ms );
 
+  if( g_kronos_interface.delay_active() )
+  {
+    delay_mixer.gain( 0, 0.0f );
+    delay_mixer.gain( 1, 1.0f );
+  }
+  else
+  {
+    delay_mixer.gain( 0, 1.0f );
+    delay_mixer.gain( 1, 0.0f );
+  }
+
+  if( g_kronos_interface.bitcrusher_active() )
+  {
+    bitcrusher_mixer.gain( 0, 0.0f );
+    bitcrusher_mixer.gain( 1, 1.0f );
+  }
+  else
+  {
+    bitcrusher_mixer.gain( 0, 1.0f );
+    bitcrusher_mixer.gain( 1, 0.0f );
+  }
 }

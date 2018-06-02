@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Interface.h"
 
 class KRONOS_INTERFACE
@@ -25,6 +27,9 @@ public:
   void            setup();
 
   void            update( ADC& adc, uint32_t time_in_ms );
+
+  bool            delay_active() const;
+  bool            bitcrusher_active() const;
 
   float           delay_time() const;
   float           feedback() const;

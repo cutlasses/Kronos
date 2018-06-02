@@ -34,11 +34,38 @@ void KRONOS_INTERFACE::update( ADC& adc, uint32_t time_in_ms )
   m_delay_toggle_button.update( time_in_ms );
   m_bitcrusher_toggle_button.update( time_in_ms );
 
+  if( m_delay_toggle_button.active() )
+  {
+    m_leds[1].set_active( true );
+  }
+  else
+  {
+    m_leds[1].set_active( false );
+  }
+
+  if( m_bitcrusher_toggle_button.active() )
+  {
+    m_leds[2].set_active( true );
+  }
+  else
+  {
+    m_leds[2].set_active( false );
+  }
+
   for( int l = 0; l < NUM_LEDS; ++l )
   {
     m_leds[l].update( time_in_ms );
   }
-  
+}
+
+bool KRONOS_INTERFACE::delay_active() const
+{
+  return m_delay_toggle_button.active();
+}
+
+bool KRONOS_INTERFACE::bitcrusher_active() const
+{
+  return m_bitcrusher_toggle_button.active();
 }
 
 float KRONOS_INTERFACE::delay_time() const
