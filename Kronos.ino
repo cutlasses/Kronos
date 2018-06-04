@@ -100,31 +100,6 @@ void loop()
   const uint32_t time_in_ms = millis();
   g_kronos_interface.update( io.adc, time_in_ms );
 
-  /*
-  // turn delay/bitcrusher stages on/off
-  if( g_kronos_interface.delay_active() )
-  {
-    delay_mixer.gain( 0, 0.0f );
-    delay_mixer.gain( 1, 1.0f );
-  }
-  else
-  {
-    delay_mixer.gain( 0, 1.0f );
-    delay_mixer.gain( 1, 0.0f );
-  }
-
-  if( g_kronos_interface.bitcrusher_active() )
-  {
-    bitcrusher_mixer.gain( 0, 0.0f );
-    bitcrusher_mixer.gain( 1, 1.0f );
-  }
-  else
-  {
-    bitcrusher_mixer.gain( 0, 1.0f );
-    bitcrusher_mixer.gain( 1, 0.0f );
-  }
-  */
-
   // set delay
   delay_line.delay( 0, g_kronos_interface.delay_time() );
   filter.frequency( g_kronos_interface.filter_frequency() );
