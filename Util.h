@@ -52,7 +52,7 @@ T lerp( const T& v1, const T& v2, float t )
 
 /////////////////////////////////////////////////////
 
-int trunc_to_int( float v )
+constexpr int trunc_to_int( float v )
 {
   return static_cast<int>( trunc(v) );
 }

@@ -83,9 +83,10 @@ void set_adc1_to_3v3()
 
 void setup()
 {
- Serial.begin(9600);
+  Serial.begin(9600);
 
-  AudioMemory(256);
+  constexpr int mem_size = 256 + KRONOS_INTERFACE::required_audio_memory();
+  AudioMemory( mem_size );
 
   analogReference(INTERNAL);
 
@@ -99,6 +100,8 @@ void loop()
   const uint32_t time_in_ms = millis();
   g_kronos_interface.update( io.adc, time_in_ms );
 
+  /*
+  // turn delay/bitcrusher stages on/off
   if( g_kronos_interface.delay_active() )
   {
     delay_mixer.gain( 0, 0.0f );
@@ -120,4 +123,30 @@ void loop()
     bitcrusher_mixer.gain( 0, 1.0f );
     bitcrusher_mixer.gain( 1, 0.0f );
   }
+  */
+
+  // set delay
+  delay_line.delay( 0, g_kronos_interface.delay_time() );
+  filter.frequency( g_kronos_interface.filter_frequency() );
+  filter.resonance( g_kronos_interface.filter_resonance() );
+  
+  const float delay_mix = g_kronos_interface.delay_mix();
+  delay_mixer.gain( 0, 1.0f - delay_mix );
+  delay_mixer.gain( 1, delay_mix );
+
+  // set reverb
+  freeverb.roomsize( g_kronos_interface.reverb_size() );
+  freeverb.damping( g_kronos_interface.reverb_damping() );
+
+  const float reverb_mix = g_kronos_interface.reverb_mix();
+  reverb_mixer.gain( 0, 1.0f - reverb_mix );
+  reverb_mixer.gain( 1, reverb_mix );
+
+  // set bitcrusher
+  bitcrusher.bits( g_kronos_interface.bit_depth() );
+  bitcrusher.sampleRate( g_kronos_interface.sample_rate() );
+
+  const float bitcrusher_mix = g_kronos_interface.bitcrusher_mix();
+  reverb_mixer.gain( 0, 1.0f - bitcrusher_mix );
+  reverb_mixer.gain( 1, bitcrusher_mix );
 }

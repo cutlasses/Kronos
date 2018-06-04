@@ -58,19 +58,9 @@ void KRONOS_INTERFACE::update( ADC& adc, uint32_t time_in_ms )
   }
 }
 
-bool KRONOS_INTERFACE::delay_active() const
-{
-  return m_delay_toggle_button.active();
-}
-
-bool KRONOS_INTERFACE::bitcrusher_active() const
-{
-  return m_bitcrusher_toggle_button.active();
-}
-
 float KRONOS_INTERFACE::delay_time() const
 {
-  return m_dials[0].value();
+  return m_dials[0].value() * MAX_DELAY_TIME_MS;
 }
 
 float KRONOS_INTERFACE::feedback() const
@@ -78,9 +68,36 @@ float KRONOS_INTERFACE::feedback() const
   return m_dials[1].value();
 }
 
+float KRONOS_INTERFACE::filter_frequency() const
+{
+  return FIXED_FILTER_FREQUENCY;
+}
+
+float KRONOS_INTERFACE::filter_resonance() const
+{
+  return FIXED_FILTER_RESONANCE;
+}
+
+float KRONOS_INTERFACE::delay_mix() const
+{
+  if( m_delay_toggle_button.active() )
+  {
+    return 1.0f;
+  }
+  else
+  {
+    return 0.0f;
+  }
+}
+
 float KRONOS_INTERFACE::reverb_size() const
 {
   return m_dials[2].value();
+}
+
+float KRONOS_INTERFACE::reverb_damping() const
+{
+  return FIXED_REVERB_DAMPING;
 }
 
 float KRONOS_INTERFACE::reverb_mix() const
@@ -96,6 +113,18 @@ int KRONOS_INTERFACE::sample_rate() const
 
 int KRONOS_INTERFACE::bit_depth() const
 {
-  return m_dials[5].value();
+  return trunc_to_int( m_dials[5].value() * 15.0f ) + 1;
+}
+
+float KRONOS_INTERFACE::bitcrusher_mix() const
+{
+  if( m_bitcrusher_toggle_button.active() )
+  {
+    return 1.0f;
+  }
+  else
+  {
+    return 0.0f;
+  }
 }
 
