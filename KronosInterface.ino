@@ -5,7 +5,7 @@ KRONOS_INTERFACE::KRONOS_INTERFACE() :
   m_dials( { DIAL( A20 ), DIAL( A19 ), DIAL( A18 ), DIAL( A17 ), DIAL( A16 ), DIAL( A13 ) } ),
   m_delay_toggle_button( DELAY_TOGGLE_PIN, true ),
   m_bitcrusher_toggle_button( BITCRUSHER_TOGGLE_PIN, true ),
-  m_leds()
+  m_leds( { LED( LED_1_PIN, false ), LED( LED_2_PIN, false ), LED( LED_3_PIN, false ) } )
 {
 
   
@@ -36,20 +36,20 @@ void KRONOS_INTERFACE::update( ADC& adc, uint32_t time_in_ms )
 
   if( m_delay_toggle_button.active() )
   {
+    m_leds[0].set_active( true );
+  }
+  else
+  {
+    m_leds[0].set_active( false );
+  }
+
+  if( m_bitcrusher_toggle_button.active() )
+  {
     m_leds[1].set_active( true );
   }
   else
   {
     m_leds[1].set_active( false );
-  }
-
-  if( m_bitcrusher_toggle_button.active() )
-  {
-    m_leds[2].set_active( true );
-  }
-  else
-  {
-    m_leds[2].set_active( false );
   }
 
   for( int l = 0; l < NUM_LEDS; ++l )
@@ -82,7 +82,7 @@ float KRONOS_INTERFACE::delay_mix() const
 {
   if( m_delay_toggle_button.active() )
   {
-    return 1.0f;
+    return 0.85f;
   }
   else
   {
@@ -97,12 +97,14 @@ float KRONOS_INTERFACE::reverb_size() const
 
 float KRONOS_INTERFACE::reverb_damping() const
 {
-  return FIXED_REVERB_DAMPING;
+  //return FIXED_REVERB_DAMPING;
+  return m_dials[3].value();
 }
 
 float KRONOS_INTERFACE::reverb_mix() const
 {
-  return m_dials[3].value();
+  //return m_dials[3].value();
+  return FIXED_REVERB_MIX;
 }
 
 int KRONOS_INTERFACE::sample_rate() const

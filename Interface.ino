@@ -103,11 +103,6 @@ int32_t BUTTON::down_time_ms() const
 {
   if( m_down_time_stamp > 0 )
   {
-//#ifdef DEBUG_OUTPUT
-//  Serial.print("Down time:");
-//  Serial.print(m_down_time_curr);
-//  Serial.print("\n");
-//#endif // DEBUG_OUTPUT
     return m_down_time_curr;
   }
   else

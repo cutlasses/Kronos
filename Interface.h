@@ -55,8 +55,8 @@ class BUTTON
   int16_t       m_prev_is_active : 1;
   int16_t       m_is_active : 1;
   int16_t       m_down_time_valid : 1;
-  uint32_t       m_down_time_stamp;
-  uint32_t       m_down_time_curr;
+  uint32_t      m_down_time_stamp;
+  uint32_t      m_down_time_curr;
 
   Bounce        m_bounce;
 
