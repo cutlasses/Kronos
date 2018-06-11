@@ -233,3 +233,66 @@ void LED::update( uint32_t time_ms )
   }
 }
 
+//////////////////////////////////////
+
+PUSH_AND_TURN::PUSH_AND_TURN( int dial_pin, int button_pin, float initial_secondary_value ) :
+  m_dial( dial_pin ),
+  m_button( button_pin, true ),
+  m_primary_value( 0.0f ),
+  m_secondary_value( initial_secondary_value ),
+  m_push_and_turning( false )
+{
+  
+}
+
+void PUSH_AND_TURN::setup()
+{
+  m_button.setup();
+}
+
+float PUSH_AND_TURN::primary_value() const
+{
+  return m_primary_value;
+}
+
+float PUSH_AND_TURN::secondary_value() const
+{
+  return m_secondary_value;
+}
+
+bool PUSH_AND_TURN::button_active() const
+{
+  return m_button.active();
+}
+
+void PUSH_AND_TURN::update( ADC& adc, uint32_t time_ms )
+{
+  m_button.update( time_ms );
+  m_dial.update( adc );
+
+  if( m_push_and_turning )
+  {
+    // keep going until button is release
+    m_push_and_turning = m_button.down_time_ms() > 0; 
+  }
+  else
+  {
+    // check for start of push and turn
+    if( m_button.down_time_ms() > PUSH_AND_TURN_DOWN_TIME_MS &&
+        abs( m_dial.value() - m_secondary_value ) < PUSH_AND_TURN_DIAL_TOLERANCE )
+    {
+      m_push_and_turning = true;
+    }
+  }
+
+  // if holding button AND turning dial - update secondary value
+  if( m_push_and_turning )
+  {
+    m_secondary_value = m_dial.value();
+  }
+  else
+  {
+    m_primary_value = m_dial.value();
+  }
+}
+

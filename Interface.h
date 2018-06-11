@@ -97,3 +97,33 @@ public:
   void          update( uint32_t time_ms );       
 };
 
+//////////////////////////////////////
+
+// toggle button and dial, states set independently. Turn dial whilst holding button changes secondary value
+class PUSH_AND_TURN
+{
+  DIAL          m_dial;
+  BUTTON        m_button;
+
+  float         m_primary_value;
+  float         m_secondary_value;
+
+  bool          m_push_and_turning;
+
+  static constexpr int    PUSH_AND_TURN_DOWN_TIME_MS    = 250;
+  static constexpr float  PUSH_AND_TURN_DIAL_TOLERANCE  = 0.1f;
+  
+ public:
+
+  PUSH_AND_TURN( int dial_pin, int button_pin, float initial_secondary_value ); // only works for toggle pins
+
+  void          setup();
+
+  float         primary_value() const;
+  float         secondary_value() const;
+
+  bool          button_active() const;
+
+  void          update( ADC& adc, uint32_t time_ms );
+};
+
