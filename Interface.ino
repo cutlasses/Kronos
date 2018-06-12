@@ -103,11 +103,6 @@ int32_t BUTTON::down_time_ms() const
 {
   if( m_down_time_stamp > 0 )
   {
-//#ifdef DEBUG_OUTPUT
-//  Serial.print("Down time:");
-//  Serial.print(m_down_time_curr);
-//  Serial.print("\n");
-//#endif // DEBUG_OUTPUT
     return m_down_time_curr;
   }
   else
@@ -235,19 +230,14 @@ void LED::update( uint32_t time_ms )
 
 //////////////////////////////////////
 
-PUSH_AND_TURN::PUSH_AND_TURN( int dial_pin, int button_pin, float initial_secondary_value ) :
-  m_dial( dial_pin ),
-  m_button( button_pin, true ),
+PUSH_AND_TURN::PUSH_AND_TURN( const DIAL& dial, const BUTTON& button, float initial_secondary_value ) :
+  m_dial( dial ),
+  m_button( button ),
   m_primary_value( 0.0f ),
   m_secondary_value( initial_secondary_value ),
   m_push_and_turning( false )
 {
   
-}
-
-void PUSH_AND_TURN::setup()
-{
-  m_button.setup();
 }
 
 float PUSH_AND_TURN::primary_value() const
@@ -260,16 +250,8 @@ float PUSH_AND_TURN::secondary_value() const
   return m_secondary_value;
 }
 
-bool PUSH_AND_TURN::button_active() const
+void PUSH_AND_TURN::update()
 {
-  return m_button.active();
-}
-
-void PUSH_AND_TURN::update( ADC& adc, uint32_t time_ms )
-{
-  m_button.update( time_ms );
-  m_dial.update( adc );
-
   if( m_push_and_turning )
   {
     // keep going until button is release

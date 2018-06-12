@@ -92,6 +92,8 @@ void setup()
 
   set_adc1_to_3v3();
 
+  g_kronos_interface.setup();
+
   Serial.print("Setup finished!\n");
 }
 
@@ -104,10 +106,25 @@ void loop()
   delay_line.delay( 0, g_kronos_interface.delay_time() );
   filter.frequency( g_kronos_interface.filter_frequency() );
   filter.resonance( g_kronos_interface.filter_resonance() );
+
+  const float feedback = g_kronos_interface.feedback();
+  feedback_mixer.gain( 0, 1.0f );
+  feedback_mixer.gain( 1, feedback );
   
   const float delay_mix = g_kronos_interface.delay_mix();
   delay_mixer.gain( 0, 1.0f - delay_mix );
   delay_mixer.gain( 1, delay_mix );
+
+//  Serial.print("Delay time:");
+//  Serial.print(g_kronos_interface.delay_time());
+//  Serial.print(" feedback:");
+//  Serial.print(feedback);
+//  Serial.print(" filter freq:");
+//  Serial.print(g_kronos_interface.filter_resonance());
+//  Serial.print(" res:");
+//  Serial.print(g_kronos_interface.filter_resonance());
+//  Serial.print(" mix:");
+//  Serial.println(delay_mix);
 
   // set reverb
   freeverb.roomsize( g_kronos_interface.reverb_size() );
@@ -117,11 +134,25 @@ void loop()
   reverb_mixer.gain( 0, 1.0f - reverb_mix );
   reverb_mixer.gain( 1, reverb_mix );
 
+//  Serial.print("Reverb size:");
+//  Serial.print(g_kronos_interface.reverb_size());
+//  Serial.print(" damping:");
+//  Serial.print(g_kronos_interface.reverb_damping());
+//  Serial.print(" mix:");
+//  Serial.println(reverb_mix);
+
   // set bitcrusher
   bitcrusher.bits( g_kronos_interface.bit_depth() );
   bitcrusher.sampleRate( g_kronos_interface.sample_rate() );
 
   const float bitcrusher_mix = g_kronos_interface.bitcrusher_mix();
-  reverb_mixer.gain( 0, 1.0f - bitcrusher_mix );
-  reverb_mixer.gain( 1, bitcrusher_mix );
+  bitcrusher_mixer.gain( 0, 1.0f - bitcrusher_mix );
+  bitcrusher_mixer.gain( 1, bitcrusher_mix );
+
+//  Serial.print("Bitcrusher sample rate:");
+//  Serial.print(g_kronos_interface.sample_rate());
+//  Serial.print(" depth:");
+//  Serial.print(g_kronos_interface.bit_depth());
+//  Serial.print(" mix:");
+//  Serial.println(bitcrusher_mix);
 }

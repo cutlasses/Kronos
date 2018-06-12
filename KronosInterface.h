@@ -5,27 +5,30 @@
 
 class KRONOS_INTERFACE
 {
-    static constexpr int    DELAY_TOGGLE_PIN              = 2;
-    static constexpr int    BITCRUSHER_TOGGLE_PIN         = 1;
-    static constexpr int    LED_1_PIN                     = 29;
-    static constexpr int    LED_2_PIN                     = 11;
-    static constexpr int    LED_3_PIN                     = 7;
+    static constexpr int      DELAY_TOGGLE_PIN              = 2;
+    static constexpr int      BITCRUSHER_TOGGLE_PIN         = 1;
+    static constexpr int      LED_1_PIN                     = 29;
+    static constexpr int      LED_2_PIN                     = 11;
+    static constexpr int      LED_3_PIN                     = 7;
 
-    static constexpr int    NUM_DIALS                     = 6;
-    static constexpr int    NUM_LEDS                      = 3;
+    static constexpr int      NUM_DIALS                     = 6;
+    static constexpr int      NUM_LEDS                      = 3;
 
-    static constexpr float  FIXED_FILTER_FREQUENCY        = 1000.0f;
-    static constexpr float  FIXED_FILTER_RESONANCE        = 0.707f;
-    static constexpr float  FIXED_REVERB_DAMPING          = 0.2f;
+    static constexpr float    INITIAL_FILTER_FREQUENCY      = 1000.0f;
+    static constexpr float    INITIAL_REVERB_MIX            = 0.5f;
+    static constexpr float    FIXED_FILTER_RESONANCE        = 0.707f;
 
-    static constexpr float  MAX_DELAY_TIME_MS             = 500.0f;
+    static constexpr float    MAX_DELAY_TIME_MS             = 500.0f;
 
-    DIAL                  m_dials[NUM_DIALS];
+    DIAL                      m_dials[NUM_DIALS];
 
-    BUTTON                m_delay_toggle_button;    // or tap bpm?
-    BUTTON                m_bitcrusher_toggle_button;
+    BUTTON                    m_delay_toggle_button;    // or tap bpm?
+    BUTTON                    m_bitcrusher_toggle_button;
 
-    LED                   m_leds[NUM_LEDS];
+    LED                       m_leds[NUM_LEDS];
+
+    PUSH_AND_TURN             m_delay_push_and_turn;
+    PUSH_AND_TURN             m_reverb_push_and_turn;
 
   public:
 

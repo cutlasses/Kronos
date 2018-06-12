@@ -55,8 +55,8 @@ class BUTTON
   int16_t       m_prev_is_active : 1;
   int16_t       m_is_active : 1;
   int16_t       m_down_time_valid : 1;
-  uint32_t       m_down_time_stamp;
-  uint32_t       m_down_time_curr;
+  uint32_t      m_down_time_stamp;
+  uint32_t      m_down_time_curr;
 
   Bounce        m_bounce;
 
@@ -102,8 +102,8 @@ public:
 // toggle button and dial, states set independently. Turn dial whilst holding button changes secondary value
 class PUSH_AND_TURN
 {
-  DIAL          m_dial;
-  BUTTON        m_button;
+  const DIAL&   m_dial;
+  const BUTTON& m_button;
 
   float         m_primary_value;
   float         m_secondary_value;
@@ -115,15 +115,11 @@ class PUSH_AND_TURN
   
  public:
 
-  PUSH_AND_TURN( int dial_pin, int button_pin, float initial_secondary_value ); // only works for toggle pins
-
-  void          setup();
+  PUSH_AND_TURN( const DIAL& dial, const BUTTON& button, float initial_secondary_value ); // only works for toggle pins
 
   float         primary_value() const;
   float         secondary_value() const;
 
-  bool          button_active() const;
-
-  void          update( ADC& adc, uint32_t time_ms );
+  void          update();
 };
 
