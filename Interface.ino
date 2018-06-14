@@ -261,7 +261,7 @@ void PUSH_AND_TURN::update()
   {
     // check for start of push and turn
     if( m_button.down_time_ms() > PUSH_AND_TURN_DOWN_TIME_MS &&
-        abs( m_dial.value() - m_secondary_value ) < PUSH_AND_TURN_DIAL_TOLERANCE )
+        abs( m_dial.value() - m_secondary_value ) > PUSH_AND_TURN_DIAL_TOLERANCE )
     {
       m_push_and_turning = true;
     }

@@ -120,7 +120,7 @@ void loop()
 //  Serial.print(" feedback:");
 //  Serial.print(feedback);
 //  Serial.print(" filter freq:");
-//  Serial.print(g_kronos_interface.filter_resonance());
+//  Serial.print(g_kronos_interface.filter_frequency());
 //  Serial.print(" res:");
 //  Serial.print(g_kronos_interface.filter_resonance());
 //  Serial.print(" mix:");

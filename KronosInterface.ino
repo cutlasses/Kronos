@@ -6,7 +6,7 @@ KRONOS_INTERFACE::KRONOS_INTERFACE() :
   m_delay_toggle_button( DELAY_TOGGLE_PIN, true ),
   m_bitcrusher_toggle_button( BITCRUSHER_TOGGLE_PIN, true ),
   m_leds( { LED( LED_1_PIN, false ), LED( LED_2_PIN, false ), LED( LED_3_PIN, false ) } ),
-  m_delay_push_and_turn( m_dials[0], m_delay_toggle_button, INITIAL_FILTER_FREQUENCY ),
+  m_delay_push_and_turn( m_dials[0], m_delay_toggle_button, INITIAL_FILTER_FREQUENCY / MAX_FILTER_FREQUENCY ),
   m_reverb_push_and_turn( m_dials[0], m_bitcrusher_toggle_button, INITIAL_REVERB_MIX )
 {
 
@@ -75,7 +75,7 @@ float KRONOS_INTERFACE::feedback() const
 
 float KRONOS_INTERFACE::filter_frequency() const
 {
-  return m_delay_push_and_turn.secondary_value();
+  return m_delay_push_and_turn.secondary_value() * MAX_FILTER_FREQUENCY;
 }
 
 float KRONOS_INTERFACE::filter_resonance() const

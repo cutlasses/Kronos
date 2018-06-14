@@ -19,6 +19,7 @@ class KRONOS_INTERFACE
     static constexpr float    FIXED_FILTER_RESONANCE        = 0.707f;
 
     static constexpr float    MAX_DELAY_TIME_MS             = 500.0f;
+    static constexpr float    MAX_FILTER_FREQUENCY          = 10000.0f;
 
     DIAL                      m_dials[NUM_DIALS];
 
