@@ -70,7 +70,7 @@ float KRONOS_INTERFACE::delay_time() const
 
 float KRONOS_INTERFACE::feedback() const
 {
-  return m_dials[1].value();
+  return m_dials[1].value() * MAX_FEEDBACK;
 }
 
 float KRONOS_INTERFACE::filter_frequency() const
