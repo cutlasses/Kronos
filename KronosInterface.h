@@ -14,12 +14,12 @@ class KRONOS_INTERFACE
     static constexpr int      NUM_DIALS                     = 6;
     static constexpr int      NUM_LEDS                      = 3;
 
-    static constexpr float    INITIAL_FILTER_FREQUENCY      = 1000.0f;
+    static constexpr float    INITIAL_FILTER_FREQUENCY      = 4000.0f;
     static constexpr float    INITIAL_REVERB_MIX            = 0.5f;
     static constexpr float    FIXED_FILTER_RESONANCE        = 0.707f;
 
     static constexpr float    MAX_DELAY_TIME_MS             = 500.0f;
-    static constexpr float    MAX_FILTER_FREQUENCY          = 20000.0f;
+    static constexpr float    MAX_FILTER_FREQUENCY          = 7350.0f;
     static constexpr float    MAX_FEEDBACK                  = 1.1f;
 
     DIAL                      m_dials[NUM_DIALS];

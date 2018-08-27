@@ -20,7 +20,9 @@ DIAL_BASE::~DIAL_BASE()
 
 bool DIAL_BASE::set_current_value( int new_value )
 {
-  if( new_value != m_current_value )
+  constexpr int THRESHOLD = trunc_to_int( 63336.0f / 256.0f );
+  //if( new_value != m_current_value )
+  if( fabs( new_value - m_current_value ) > THRESHOLD )
   {
     m_current_value = new_value;
     return true;

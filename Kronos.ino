@@ -39,7 +39,7 @@ AudioConnection          patch_cord_3( io.audio_input, 0, delay_mixer, 0);
 AudioConnection          patch_cord_4( delay_line, 0, filter, 0);
 AudioConnection          patch_cord_5( delay_line, 0, delay_mixer, 1);
 AudioConnection          patch_cord_6( filter, 0, feedback_mixer, 1);
-AudioConnection          patch_cord_d7( delay_mixer, 0, freeverb, 0 );
+AudioConnection          patch_cord_7( delay_mixer, 0, freeverb, 0 );
 AudioConnection          patch_cord_8( delay_mixer, 0, reverb_mixer, 0 );
 AudioConnection          patch_cord_9( freeverb, 0, reverb_mixer, 1);
 AudioConnection          patch_cord_10( reverb_mixer, 0, bitcrusher, 0 );
@@ -116,7 +116,6 @@ void loop()
   delay_mixer.gain( 1, delay_mix );
 
 //  Serial.print("Delay time:");
-//  Serial.print(g_kronos_interface.delay_time());
 //  Serial.println(g_kronos_interface.delay_time());
 //  Serial.print(" feedback:");
 //  Serial.print(feedback);
