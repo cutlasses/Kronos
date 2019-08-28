@@ -29,7 +29,7 @@ public:
       // is this sample clipping
       for( int i = 0; i < AUDIO_BLOCK_SAMPLES; ++i )
       {
-        const int threshold = 10;
+        const int threshold = 4;
         if( abs(in_block->data[i]) >= (std::numeric_limits<int16_t>::max() - threshold) )
         {
           m_clip_timer = m_clip_time_out;
