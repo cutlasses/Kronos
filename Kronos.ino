@@ -25,7 +25,7 @@ struct IO
 
 IO io;
 
-const constexpr int CLIP_TIMEOUT(1000);
+const constexpr int CLIP_TIMEOUT(100);
 
 AudioMixer4              feedback_mixer;
 AudioEffectDelay         delay_line;
@@ -38,7 +38,7 @@ AudioMixer4              bitcrusher_mixer;
 CLIP_DETECTOR            clip_detector(CLIP_TIMEOUT);
 
 AudioConnection          patch_cord_1( io.audio_input, 0, clip_detector, 0 );
-AudioConnection          patch_cord_2( io.audio_input, 0, feedback_mixer, 0 );
+AudioConnection          patch_cord_2( clip_detector, 0, feedback_mixer, 0 );
 AudioConnection          patch_cord_3( feedback_mixer, 0, delay_line, 0 );
 AudioConnection          patch_cord_4( io.audio_input, 0, delay_mixer, 0);
 AudioConnection          patch_cord_5( delay_line, 0, filter, 0);

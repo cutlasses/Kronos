@@ -38,6 +38,8 @@ public:
       }
       
       transmit(in_block);
+
+      release(in_block);
     }
   }
   
