@@ -4,6 +4,7 @@
 #include <SPI.h>
 #include <SD.h>
 #include <SerialFlash.h>
+#include "ClipDetector.h"
 #include "KronosInterface.h"
 
 
@@ -24,6 +25,8 @@ struct IO
 
 IO io;
 
+const constexpr int CLIP_TIMEOUT(1000);
+
 AudioMixer4              feedback_mixer;
 AudioEffectDelay         delay_line;
 AudioFilterStateVariable filter;
@@ -32,20 +35,22 @@ AudioEffectFreeverb      freeverb;
 AudioMixer4              reverb_mixer;
 AudioEffectBitcrusher    bitcrusher;
 AudioMixer4              bitcrusher_mixer;
+CLIP_DETECTOR            clip_detector(CLIP_TIMEOUT);
 
-AudioConnection          patch_cord_1( io.audio_input, 0, feedback_mixer, 0 );
-AudioConnection          patch_cord_2( feedback_mixer, 0, delay_line, 0 );
-AudioConnection          patch_cord_3( io.audio_input, 0, delay_mixer, 0);
-AudioConnection          patch_cord_4( delay_line, 0, filter, 0);
-AudioConnection          patch_cord_5( delay_line, 0, delay_mixer, 1);
-AudioConnection          patch_cord_6( filter, 0, feedback_mixer, 1);
-AudioConnection          patch_cord_7( delay_mixer, 0, freeverb, 0 );
-AudioConnection          patch_cord_8( delay_mixer, 0, reverb_mixer, 0 );
-AudioConnection          patch_cord_9( freeverb, 0, reverb_mixer, 1);
-AudioConnection          patch_cord_10( reverb_mixer, 0, bitcrusher, 0 );
-AudioConnection          patch_cord_11( reverb_mixer, 0, bitcrusher_mixer, 0 );
-AudioConnection          patch_cord_12( bitcrusher, 0, bitcrusher_mixer, 1 );
-AudioConnection          patch_cord_13( bitcrusher_mixer, io.audio_output );
+AudioConnection          patch_cord_1( io.audio_input, 0, clip_detector, 0 );
+AudioConnection          patch_cord_2( io.audio_input, 0, feedback_mixer, 0 );
+AudioConnection          patch_cord_3( feedback_mixer, 0, delay_line, 0 );
+AudioConnection          patch_cord_4( io.audio_input, 0, delay_mixer, 0);
+AudioConnection          patch_cord_5( delay_line, 0, filter, 0);
+AudioConnection          patch_cord_6( delay_line, 0, delay_mixer, 1);
+AudioConnection          patch_cord_7( filter, 0, feedback_mixer, 1);
+AudioConnection          patch_cord_8( delay_mixer, 0, freeverb, 0 );
+AudioConnection          patch_cord_9( delay_mixer, 0, reverb_mixer, 0 );
+AudioConnection          patch_cord_10( freeverb, 0, reverb_mixer, 1);
+AudioConnection          patch_cord_11( reverb_mixer, 0, bitcrusher, 0 );
+AudioConnection          patch_cord_12( reverb_mixer, 0, bitcrusher_mixer, 0 );
+AudioConnection          patch_cord_13( bitcrusher, 0, bitcrusher_mixer, 1 );
+AudioConnection          patch_cord_14( bitcrusher_mixer, io.audio_output );
 
 KRONOS_INTERFACE         g_kronos_interface;
 
@@ -155,4 +160,6 @@ void loop()
 //  Serial.print(g_kronos_interface.bit_depth());
 //  Serial.print(" mix:");
 //  Serial.println(bitcrusher_mix);
+
+  g_kronos_interface.set_clipping( clip_detector.clipping() );
 }

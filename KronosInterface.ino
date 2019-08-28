@@ -133,3 +133,7 @@ float KRONOS_INTERFACE::bitcrusher_mix() const
   }
 }
 
+void KRONOS_INTERFACE::set_clipping( bool clipping )
+{
+  m_leds[2].set_active(clipping);
+}

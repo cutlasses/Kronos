@@ -53,4 +53,6 @@ class KRONOS_INTERFACE
     int                       sample_rate() const;
     int                       bit_depth() const;
     float                     bitcrusher_mix() const;
+
+    void                      set_clipping( bool clipping );
 };
