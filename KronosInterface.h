@@ -14,6 +14,7 @@ class KRONOS_INTERFACE
     static constexpr int      NUM_DIALS                     = 6;
     static constexpr int      NUM_LEDS                      = 3;
 
+    static constexpr float    INITIAL_DELAY_MIX             = 0.75f;
     static constexpr float    INITIAL_FILTER_FREQUENCY      = 4000.0f;
     static constexpr float    INITIAL_REVERB_MIX            = 0.5f;
     static constexpr float    FIXED_FILTER_RESONANCE        = 0.707f;
@@ -29,8 +30,9 @@ class KRONOS_INTERFACE
 
     LED                       m_leds[NUM_LEDS];
 
-    PUSH_AND_TURN             m_delay_push_and_turn;
-    PUSH_AND_TURN             m_reverb_push_and_turn;
+    PUSH_AND_TURN             m_delay_time_and_mix;
+    PUSH_AND_TURN             m_feedback_and_filter_freq;
+    PUSH_AND_TURN             m_reverb_size_and_mix_push_and_turn;
 
   public:
 

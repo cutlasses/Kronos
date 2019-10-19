@@ -6,8 +6,9 @@ KRONOS_INTERFACE::KRONOS_INTERFACE() :
   m_delay_toggle_button( DELAY_TOGGLE_PIN, true ),
   m_bitcrusher_toggle_button( BITCRUSHER_TOGGLE_PIN, true ),
   m_leds( { LED( LED_1_PIN, false ), LED( LED_2_PIN, false ), LED( LED_3_PIN, false ) } ),
-  m_delay_push_and_turn( m_dials[0], m_delay_toggle_button, INITIAL_FILTER_FREQUENCY / MAX_FILTER_FREQUENCY ),
-  m_reverb_push_and_turn( m_dials[0], m_bitcrusher_toggle_button, INITIAL_REVERB_MIX )
+  m_delay_time_and_mix( m_dials[0], m_delay_toggle_button, INITIAL_DELAY_MIX ),
+  m_feedback_and_filter_freq( m_dials[1], m_delay_toggle_button, INITIAL_FILTER_FREQUENCY / MAX_FILTER_FREQUENCY ),
+  m_reverb_size_and_mix_push_and_turn( m_dials[2], m_delay_toggle_button, INITIAL_REVERB_MIX )
 {
 
 }
@@ -36,8 +37,9 @@ void KRONOS_INTERFACE::update( ADC& adc, uint32_t time_in_ms )
   m_bitcrusher_toggle_button.update( time_in_ms );
 
   // push and turn must be updated after dials and buttons
-  m_delay_push_and_turn.update();
-  m_reverb_push_and_turn.update();
+  m_delay_time_and_mix.update();
+  m_feedback_and_filter_freq.update();
+  m_reverb_size_and_mix_push_and_turn.update();
 
   if( m_delay_toggle_button.active() )
   {
@@ -65,17 +67,17 @@ void KRONOS_INTERFACE::update( ADC& adc, uint32_t time_in_ms )
 
 float KRONOS_INTERFACE::delay_time() const
 {
-  return m_delay_push_and_turn.primary_value() * MAX_DELAY_TIME_MS;
+  return m_delay_time_and_mix.primary_value() * MAX_DELAY_TIME_MS;
 }
 
 float KRONOS_INTERFACE::feedback() const
 {
-  return m_dials[1].value() * MAX_FEEDBACK;
+  return m_feedback_and_filter_freq.primary_value() * MAX_FEEDBACK;
 }
 
 float KRONOS_INTERFACE::filter_frequency() const
 {
-  return m_delay_push_and_turn.secondary_value() * MAX_FILTER_FREQUENCY;
+  return m_feedback_and_filter_freq.secondary_value() * MAX_FILTER_FREQUENCY;
 }
 
 float KRONOS_INTERFACE::filter_resonance() const
@@ -87,7 +89,7 @@ float KRONOS_INTERFACE::delay_mix() const
 {
   if( m_delay_toggle_button.active() )
   {
-    return 0.85f;
+    return m_delay_time_and_mix.secondary_value();
   }
   else
   {
@@ -97,7 +99,7 @@ float KRONOS_INTERFACE::delay_mix() const
 
 float KRONOS_INTERFACE::reverb_size() const
 {
-  return m_dials[2].value();
+  return m_reverb_size_and_mix_push_and_turn.primary_value();
 }
 
 float KRONOS_INTERFACE::reverb_damping() const
@@ -107,7 +109,7 @@ float KRONOS_INTERFACE::reverb_damping() const
 
 float KRONOS_INTERFACE::reverb_mix() const
 {
-  return m_reverb_push_and_turn.secondary_value();
+  return m_reverb_size_and_mix_push_and_turn.secondary_value();
 }
 
 int KRONOS_INTERFACE::sample_rate() const
